@@ -3,6 +3,7 @@
 namespace Torann\Currency\Middleware;
 
 use Closure;
+use Cookie;
 use Illuminate\Http\Request;
 
 class CurrencyMiddleware
@@ -49,7 +50,11 @@ class CurrencyMiddleware
         }
 
         // Get currency from session
-        $currency = $request->session()->get('currency');
+        if (currency()->config('user_driver') === 'session')
+            $currency = $request->session()->get('currency');
+        else
+            $currency = Cookie::get('currency');
+        
         if ($currency && currency()->isActive($currency) === true) {
             return $currency;
         }
@@ -93,7 +98,10 @@ class CurrencyMiddleware
         currency()->setUserCurrency($currency);
 
         // Save it for later too!
-        $request->session()->put(['currency' => $currency]);
+        if (currency()->config('user_driver') === 'session')
+            $request->session()->put(['currency' => $currency]);
+        else
+            Cookie::queue('currency', $currency, 86400 * 360);
 
         return $currency;
     }

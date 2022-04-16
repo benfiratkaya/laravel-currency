@@ -113,4 +113,18 @@ return [
         ],
 
     ],
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Default User Storage Driver
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify the default user storage driver that should be used
+    | by the framework.
+    |
+    | Supported: "session", "cookie"
+    |
+    */
+
+    'user_driver' => 'session',
 ];
